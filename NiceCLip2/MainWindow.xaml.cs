@@ -239,7 +239,7 @@ namespace NiceCLip2
                     break;
                 case Key.C: // Upper / Lower case
                     formatter = Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)
-                                                ? (TextFormatter) TextUtilities.ToUpper : TextUtilities.ToLower;
+                                ? (TextFormatter) TextUtilities.ToUpper : TextUtilities.ToLower;
                     break;
                 case Key.Enter:
                     CopyProcedure();
