@@ -5,8 +5,97 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NiceCLip2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        x:Name="NiceClip2Window"
+        Title="NiceClip 2" Height="664" Width="800" FontFamily="Calibri Light" SnapsToDevicePixels="True" KeyDown="NiceClip2Window_KeyDown" ResizeMode="NoResize" Deactivated="NiceClip2Window_Deactivated" Activated="NiceClip2Window_Activated" Closing="NiceClip2Window_Closing">
+    <Window.Resources>
+        <!--<Style x:Key="ClipboardEntriesHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Visibility" Value="Collapsed" />
+        </Style>
+
+        <Style x:Key="ClipboardEntriesContainerStyle" TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Visibility" Value="Collapsed" />
+        </Style>-->
+    </Window.Resources>
+    <Window.Background>
+        <SolidColorBrush Color="Black" Opacity="0.5"/>
+    </Window.Background>
+
+    <Grid x:Name="WindowContent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20px" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20px"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <DockPanel x:Name="TitleBar" Grid.Row="0" Margin="10,0">
+            <Button x:Name="CloseButton" Content="X"
+                    Click="CloseButton_Click"                 
+                    DockPanel.Dock="Right" BorderThickness="0,2,0,0" Background="Transparent" BorderBrush="Transparent" Foreground="White" />
+
+            <TextBlock HorizontalAlignment="Left" Text="{Binding ElementName=NiceClip2Window, Path=Title}" Foreground="White" Margin="10,0,0,0"/>
+        </DockPanel>
+
+        <Grid Width="766" Grid.Row="1" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="7*" />
+                <RowDefinition Height="610*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="101*"/>
+                <ColumnDefinition Width="545*"/>
+                <ColumnDefinition  Width="120" />
+            </Grid.ColumnDefinitions>
+
+            <ListView x:Name="ClipboardEntries" Margin="10,5,0,10" Width="Auto"
+                        Grid.Column="0" Background="Transparent" BorderBrush="White" Foreground="White"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderThickness="0.5" Grid.ColumnSpan="2" Grid.Row="1">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="{Binding  Path=At, StringFormat='HH:mm:ss'}" Width="70" />
+                            <TextBlock Grid.Column="1" Text="{Binding Data}" TextWrapping="Wrap" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <StackPanel Grid.Column="2" Margin="0,2.667,0,0" Grid.Row="1">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="#FF26A0DA" />
+                        <Setter Property="BorderBrush" Value="#FF26A0DA" />
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#FFADADAD"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Content="Copy" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Click="CopyBtn_Click"
+                        IsEnabled="{Binding ElementName=ClipboardEntries, Path=SelectedItems.Count}" />
+                <Button Content="Delete" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75"
+                        IsEnabled="{Binding ElementName=ClipboardEntries, Path=SelectedItems.Count}"/>
+                <Separator Margin="20,5" />
+                <Button Content="Clear" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75"
+                        IsEnabled="{Binding ElementName=ClipboardEntries, Path=Items.Count}" ToolTip="Clear the content of the system clipboard"/>
+            </StackPanel>
+        </Grid>
+        <DockPanel Background="#1b5875" Grid.Row="2">
+            <TextBlock x:Name="StatusBar" Foreground="White" VerticalAlignment="Center" Margin="5,0,0,0" />
+        </DockPanel>
     </Grid>
 </Window>
