@@ -19,8 +19,22 @@
         </Style>-->
     </Window.Resources>
     <Window.Background>
-        <SolidColorBrush Color="Black" Opacity="0.5"/>
+        <SolidColorBrush x:Name="WindowBGBrush" Color="Black" />
     </Window.Background>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <EventTrigger.Actions>
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="WindowBGBrush"
+                                          Storyboard.TargetProperty="(Brush.Opacity)"
+                                          From="0" To="0.7"
+                                          Duration="0:0:0.2" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger.Actions>
+        </EventTrigger>
+    </Window.Triggers>
 
     <Grid x:Name="WindowContent">
         <Grid.RowDefinitions>
@@ -95,7 +109,22 @@
             </StackPanel>
         </Grid>
         <DockPanel Background="#1b5875" Grid.Row="2">
-            <TextBlock x:Name="StatusBar" Foreground="White" VerticalAlignment="Center" Margin="5,0,0,0" />
+            <TextBlock x:Name="StatusBar" Foreground="White" VerticalAlignment="Center" Margin="5,0,0,0">
+                <TextBlock.Triggers>
+                    <EventTrigger RoutedEvent="Window.Loaded">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="WindowBGBrush"
+                                                      Storyboard.TargetProperty="(Brush.Opacity)"
+                                                      From="0" To="0.7"
+                                                      Duration="0:0:0.2" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </TextBlock.Triggers>
+            </TextBlock>
         </DockPanel>
     </Grid>
 </Window>

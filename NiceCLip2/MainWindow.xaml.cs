@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -42,6 +44,19 @@ namespace NiceCLip2
             notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.None;
             notifyIcon.BalloonTipTitle = "Copied Text";
             notifyIcon.Visible = true;
+            notifyIcon.DoubleClick += Open_MenuItem_Click;
+
+            System.Windows.Forms.ContextMenu menu = new System.Windows.Forms.ContextMenu();
+
+            System.Windows.Forms.MenuItem openMenuItem = new System.Windows.Forms.MenuItem("Open NiceClip");
+            openMenuItem.Click += Open_MenuItem_Click;
+            System.Windows.Forms.MenuItem quitMenuItem = new System.Windows.Forms.MenuItem("Quit");
+            openMenuItem.Click += Quit_MenuItem_Click;
+
+            menu.MenuItems.Add(openMenuItem);
+            menu.MenuItems.Add(quitMenuItem);
+
+            notifyIcon.ContextMenu = menu;
 
             OnClipboardMessage += PollClipboard;
             WindowStyle = WindowStyle.None;
@@ -126,8 +141,7 @@ namespace NiceCLip2
                     }
                     else
                     {
-                        Show();
-                        Activate();
+                        ActivateWindow();
                     }
 
                     break;
@@ -144,6 +158,22 @@ namespace NiceCLip2
             }
 
             return IntPtr.Zero;
+        }
+
+        private void Open_MenuItem_Click(object Sender, EventArgs e)
+        {
+            ActivateWindow();
+        }
+
+        private void Quit_MenuItem_Click(object Sender, EventArgs e)
+        {
+            Shutdown();
+        }
+
+        private void ActivateWindow()
+        {
+            Show();
+            Activate();
         }
 
         private string GetSelectedText()
@@ -187,6 +217,7 @@ namespace NiceCLip2
             string selected = GetSelectedText();
             string finalText = await FormatText(selected);
             CopyTextToUserClipboard(finalText);
+            StatusBar.Text = "Copied text to System Clipboard";
 
             isCopying = false;
         }
@@ -269,26 +300,52 @@ namespace NiceCLip2
 
         private void NiceClip2Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Shutdown();
+        }
+
+        private void Shutdown()
+        {
             notifyIcon.Visible = false;
+            notifyIcon.Icon = null;
             notifyIcon.Dispose();
+            Application.Current.Shutdown();
         }
 
         private void DeleteBtn_Click(object sender, RoutedEventArgs e)
         {
             if (ClipboardEntries.SelectedItems.Count > 0)
             {
-                ClipboardHistoryItem[] selected = new ClipboardHistoryItem[ClipboardEntries.SelectedItems.Count];
-                ClipboardEntries.SelectedItems.CopyTo(selected, 0);
+                int[] selectedIndices = new int[ClipboardEntries.SelectedItems.Count];
+                List<ClipboardHistoryItem> selected = new List<ClipboardHistoryItem>(ClipboardEntries.SelectedItems.Cast<ClipboardHistoryItem>().ToList());
+                int i = 0;
                 foreach (ClipboardHistoryItem reference in selected)
                 {
+                    int selectedIndex = ClipboardEntriesCol.IndexOf(reference);
+                    selectedIndices[i] = selectedIndex;
                     ClipboardEntriesCol.Remove(reference);
+
+                    i++;
                 }
+
+                int firstIndex = selectedIndices.Min();
+
+                if (ClipboardEntries.Items.Count > 0)
+                {
+                    if (ClipboardEntries.Items.Count >= firstIndex - 1)
+                        ClipboardEntries.SelectedIndex = firstIndex;
+                    else
+                        ClipboardEntries.SelectedIndex = ClipboardEntries.Items.Count - 1;
+                }
+
+                StatusBar.Text = String.Format("Removed {0} {1}", selected.Count, selected.Count > 1 ? "items" : "item");
+                ClipboardEntries.Focus();
             }
         }
 
         private void ClearBtn_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.Clear();
+            StatusBar.Text = "System Clipboard content was cleared";
         }
     }
 }
