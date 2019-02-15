@@ -199,6 +199,7 @@ namespace NiceCLip2
             string finalText = await FormatText(selected, formatter);
             CopyTextToUserClipboard(finalText);
             LastCopiedText = finalText;
+            StatusBar.Text = "Copied text to System Clipboard with format";
 
             isCopying = false;
         }
@@ -270,6 +271,24 @@ namespace NiceCLip2
         {
             notifyIcon.Visible = false;
             notifyIcon.Dispose();
+        }
+
+        private void DeleteBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (ClipboardEntries.SelectedItems.Count > 0)
+            {
+                ClipboardHistoryItem[] selected = new ClipboardHistoryItem[ClipboardEntries.SelectedItems.Count];
+                ClipboardEntries.SelectedItems.CopyTo(selected, 0);
+                foreach (ClipboardHistoryItem reference in selected)
+                {
+                    ClipboardEntriesCol.Remove(reference);
+                }
+            }
+        }
+
+        private void ClearBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.Clear();
         }
     }
 }

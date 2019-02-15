@@ -88,10 +88,10 @@
                 <Button Content="Copy" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Click="CopyBtn_Click"
                         IsEnabled="{Binding ElementName=ClipboardEntries, Path=SelectedItems.Count}" />
                 <Button Content="Delete" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75"
-                        IsEnabled="{Binding ElementName=ClipboardEntries, Path=SelectedItems.Count}"/>
+                        IsEnabled="{Binding ElementName=ClipboardEntries, Path=SelectedItems.Count}" Click="DeleteBtn_Click"/>
                 <Separator Margin="20,5" />
                 <Button Content="Clear" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75"
-                        IsEnabled="{Binding ElementName=ClipboardEntries, Path=Items.Count}" ToolTip="Clear the content of the system clipboard"/>
+                         ToolTip="Clear the content of the system clipboard" Click="ClearBtn_Click"/>
             </StackPanel>
         </Grid>
         <DockPanel Background="#1b5875" Grid.Row="2">

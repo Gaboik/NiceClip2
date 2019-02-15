@@ -67,7 +67,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ClipboardHistoryItem.cs" />
-    <Compile Include="ClipboardMonitor.cs" />
     <Compile Include="CustomWindowChrome.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
